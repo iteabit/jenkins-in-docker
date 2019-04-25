@@ -1,5 +1,4 @@
 FROM jenkins:2.32.1
-MAINTAINER Anton Fisher <a.fschr@gmail.com>
 
 # root user for Jenkins, need to get access to /var/run/docker.sock (fix this in the future!)
 USER root
@@ -10,8 +9,8 @@ ENV JENKINS_HOME /root/jenkins
 ENV JENKINS_VERSION 2.32.1
 
 # GitHub repository to store Jenkins configuration
-ENV GITHUB_USERNAME antonfisher
-ENV GITHUB_CONFIG_REPOSITORY my-jenkins-config
+ENV GITHUB_USERNAME iteabit
+ENV GITHUB_CONFIG_REPOSITORY demo1-jenkins-config
 
 # Make Jenkins home directory
 RUN mkdir -p $JENKINS_HOME
@@ -29,7 +28,7 @@ RUN echo "America/Los_Angeles" > /etc/timezone &&\
 
 # Copy RSA keys for Jenkins config repository (default keys).
 # This public key should be added to:
-# https://github.com/%YOUR_JENKINS_CONFIG_REPOSITORY%/settings/keys
+# https://github.com/iteabit/demo1-jenkins-config/settings/keys
 COPY keys/jenkins.config.id_rsa     $HOME/.ssh/id_rsa
 COPY keys/jenkins.config.id_rsa.pub $HOME/.ssh/id_rsa.pub
 RUN chmod 600 $HOME/.ssh/id_rsa &&\
@@ -41,7 +40,7 @@ RUN /bin/bash -c "eval '$(ssh-agent -s)'; ssh-add $HOME/.ssh/id_rsa;"
 # Copy RSA keys for your application repository and add
 # host 'github.com-application-jenkins' for application code pulls.
 # This public key should be added to
-# https://github.com/%YOUR_APPLICATION_REPOSITORY%/settings/keys
+# https://github.com/iteabit/demo-go-app/settings/keys
 COPY keys/jenkins.application.id_rsa     $HOME/.ssh/jenkins.application.id_rsa
 COPY keys/jenkins.application.id_rsa.pub $HOME/.ssh/jenkins.application.id_rsa.pub
 RUN chmod 600 $HOME/.ssh/jenkins.application.id_rsa &&\
