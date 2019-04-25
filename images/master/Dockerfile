@@ -1,4 +1,4 @@
-FROM jenkins:2.32.1
+FROM jenkinsdev
 
 # root user for Jenkins, need to get access to /var/run/docker.sock (fix this in the future!)
 USER root
@@ -6,7 +6,7 @@ USER root
 # Environment
 ENV HOME /root
 ENV JENKINS_HOME /root/jenkins
-ENV JENKINS_VERSION 2.32.1
+#ENV JENKINS_VERSION 2.174
 
 # GitHub repository to store Jenkins configuration
 ENV GITHUB_USERNAME iteabit
@@ -18,8 +18,8 @@ RUN mkdir -p $JENKINS_HOME
 # Install Jenkins plugins
 RUN /usr/local/bin/install-plugins.sh \
     scm-sync-configuration:0.0.10 \
-    workflow-aggregator:2.4 \
-    docker-workflow:1.8
+    workflow-aggregator:2.6 \
+    docker-workflow:1.18
 
 # Set timezone
 RUN echo "America/Los_Angeles" > /etc/timezone &&\
@@ -67,4 +67,4 @@ VOLUME $JENKINS_HOME/workspace
 
 # Run init.sh script after container start
 COPY src/init.sh /usr/local/bin/init.sh
-ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/init.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/init.sh"]
